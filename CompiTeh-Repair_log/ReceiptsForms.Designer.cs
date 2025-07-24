@@ -105,6 +105,7 @@
             btnOK.TabIndex = 17;
             btnOK.Text = "ОК";
             btnOK.UseVisualStyleBackColor = false;
+            btnOK.Click += btnOK_Click;
             // 
             // comboBoxClientType
             // 
