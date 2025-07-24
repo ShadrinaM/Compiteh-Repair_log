@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ye1j4HLTifM=",
+  "success": true,
+  "projectFilePath": "M:\\Git\\Compiteh-Repair_log\\CompiTeh-Repair_log\\CompiTeh-Repair_log.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MM Shadrina\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\MM Shadrina\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\MM Shadrina\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
