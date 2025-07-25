@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CompiTeh-Repair_log")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aace9a24d7b8c2736fa703aaf0047b255222f144")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0a85210d3cdf63ad68c274ded184b19c34e137d")]
 [assembly: System.Reflection.AssemblyProductAttribute("CompiTeh-Repair_log")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CompiTeh-Repair_log")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

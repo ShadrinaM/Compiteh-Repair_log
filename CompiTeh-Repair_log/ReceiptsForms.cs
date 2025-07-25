@@ -671,11 +671,6 @@
 
 
 
-
-
-
-
-
 using CompiTeh_Repair_log.Forms;
 using Npgsql;
 using System;
@@ -689,8 +684,12 @@ namespace CompiTeh_Repair_log
         private NpgsqlConnection connection;
         private Form mainForm;
         private DataTable clientsDataTable;
+        private DataTable devicesDataTable;
         private int? lastAddedClientId = null;
+        private int? lastAddedDeviceId = null;
 
+        // Добавляем временный список для хранения ID добавленных устройств
+        private List<int> tempDeviceIds = new List<int>();
 
         public ReceiptsForms(NpgsqlConnection conn, Form menushka)
         {
@@ -704,7 +703,7 @@ namespace CompiTeh_Repair_log
             dataGridViewClient.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewClient.MultiSelect = false;
             dataGridViewClient.CellClick += DataGridViewClient_CellClick;
-            dataGridViewClient.ReadOnly = true; // Запрещает редактирование всех ячеек
+            dataGridViewClient.ReadOnly = true;
 
             // Добавляем обработчик для правой кнопки мыши
             dataGridViewClient.MouseClick += DataGridViewClient_MouseClick;
@@ -731,7 +730,28 @@ namespace CompiTeh_Repair_log
             dataGridViewDevices.CellClick += DataGridViewDevices_CellClick;
             dataGridViewDevices.ReadOnly = true;
 
+            // Инициализируем пустой источник данных для устройств
+            devicesDataTable = new DataTable();
+            dataGridViewDevices.DataSource = devicesDataTable;
 
+            // Добавляем обработчик для правой кнопки мыши для устройств
+            dataGridViewDevices.MouseClick += DataGridViewDevices_MouseClick;
+
+            // Создаем контекстное меню для устройств
+            var deviceContextMenu = new ContextMenuStrip();
+
+            // Пункт "Изменить запись" для устройств
+            var editDeviceMenuItem = new ToolStripMenuItem("Изменить запись");
+            editDeviceMenuItem.Click += EditDeviceMenuItem_Click;
+            deviceContextMenu.Items.Add(editDeviceMenuItem);
+
+            // Пункт "Удалить запись" для устройств
+            var deleteDeviceMenuItem = new ToolStripMenuItem("Удалить запись");
+            deleteDeviceMenuItem.Click += DeleteDeviceMenuItem_Click;
+            deviceContextMenu.Items.Add(deleteDeviceMenuItem);
+
+            // Привязываем контекстное меню к DataGridView устройств
+            dataGridViewDevices.ContextMenuStrip = deviceContextMenu;
 
             // Подписка на события изменения выбора в комбобоксах
             comboBoxClientType.SelectedIndexChanged += comboBoxClientType_SelectedIndexChanged;
@@ -964,7 +984,16 @@ namespace CompiTeh_Repair_log
             DevicesForm devicesForm = new DevicesForm(connection, this);
             if (devicesForm.ShowDialog() == DialogResult.OK)
             {
-                 LoadDevices();
+                lastAddedDeviceId = devicesForm.LastAddedDeviceId;
+
+                // Добавляем ID устройства во временный массив
+                if (lastAddedDeviceId.HasValue)
+                {
+                    tempDeviceIds.Add(lastAddedDeviceId.Value);
+                }
+
+                // Загружаем только устройства из временного массива
+                LoadTempDevices();
             }
         }
 
@@ -1001,7 +1030,7 @@ namespace CompiTeh_Repair_log
             if (devicesForm.ShowDialog() == DialogResult.OK)
             {
                 // Обновляем данные после редактирования
-                LoadDevices();
+                LoadTempDevices();
             }
         }
 
@@ -1059,7 +1088,7 @@ namespace CompiTeh_Repair_log
                                 MessageBoxIcon.Information);
 
                             // Обновляем данные после удаления
-                            LoadDevices();
+                            LoadTempDevices();
                         }
                     }
                 }
@@ -1093,10 +1122,17 @@ namespace CompiTeh_Repair_log
             }
         }
 
+
+
+
+
+
+
+        // Модифицируем метод ViewData_Load
         private void ViewData_Load(object sender, EventArgs e)
         {
             LoadClients();
-            LoadDevices();
+            // Не загружаем все устройства при открытии формы
             comboBoxClientType.SelectedIndex = 0;
         }
 
@@ -1173,7 +1209,7 @@ namespace CompiTeh_Repair_log
             }
         }
 
-        // Загрузка устройств в dataGridViewDevices
+        // Загрузка всех устройств в dataGridViewDevices
         private void LoadDevices(string deviceTypeFilter = null)
         {
             try
@@ -1268,6 +1304,103 @@ namespace CompiTeh_Repair_log
             }
         }
 
+
+        // Новый метод для загрузки только выбранных устройств
+        private void LoadTempDevices()
+        {
+            if (tempDeviceIds.Count == 0)
+            {
+                devicesDataTable.Clear();
+                return;
+            }
+
+            try
+            {
+                string query = @"SELECT device_id, device_type, manufacturer, model_number, 
+                              serial_number, completeness, device_notes FROM Devices
+                              WHERE device_id = ANY(@deviceIds)";
+
+                using (var cmd = new NpgsqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@deviceIds", tempDeviceIds.ToArray());
+
+                    using (var adapter = new NpgsqlDataAdapter(cmd))
+                    {
+                        devicesDataTable = new DataTable();
+                        adapter.Fill(devicesDataTable);
+
+                        dataGridViewDevices.AutoGenerateColumns = false;
+                        dataGridViewDevices.DataSource = devicesDataTable;
+
+                        dataGridViewDevices.Columns.Clear();
+
+                        dataGridViewDevices.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "device_id",
+                            HeaderText = "ID",
+                            Name = "device_id",
+                            Visible = false
+                        });
+
+                        dataGridViewDevices.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "device_type",
+                            HeaderText = "Тип устройства",
+                            Name = "device_type"
+                        });
+
+                        dataGridViewDevices.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "manufacturer",
+                            HeaderText = "Производитель",
+                            Name = "manufacturer"
+                        });
+
+                        dataGridViewDevices.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "model_number",
+                            HeaderText = "Модель",
+                            Name = "model_number"
+                        });
+
+                        dataGridViewDevices.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "serial_number",
+                            HeaderText = "Серийный номер",
+                            Name = "serial_number"
+                        });
+
+                        dataGridViewDevices.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "completeness",
+                            HeaderText = "Комплектность",
+                            Name = "completeness"
+                        });
+
+                        dataGridViewDevices.Columns.Add(new DataGridViewTextBoxColumn()
+                        {
+                            DataPropertyName = "device_notes",
+                            HeaderText = "Примечания",
+                            Name = "device_notes"
+                        });
+
+                        if (lastAddedDeviceId.HasValue)
+                        {
+                            SelectDeviceInGrid(lastAddedDeviceId.Value);
+                            lastAddedDeviceId = null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке устройств: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
         private void SelectClientInGrid(int clientId)
         {
             foreach (DataGridViewRow row in dataGridViewClient.Rows)
@@ -1317,13 +1450,117 @@ namespace CompiTeh_Repair_log
             }
 
             // Проверяем, есть ли устройства для квитанции
-            if (dataGridViewDevices.Rows.Count == 0)
+            if (tempDeviceIds.Count == 0)
             {
                 MessageBox.Show("Пожалуйста, добавьте хотя бы одно устройство", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                // Начинаем транзакцию
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Получаем ID выбранного клиента
+                        var selectedClientRow = dataGridViewClient.SelectedRows[0];
+                        int clientId = Convert.ToInt32(selectedClientRow.Cells["client_id"].Value);
+
+                        // 1. Создаем запись в таблице Receipts
+                        string insertReceiptQuery = @"
+                    INSERT INTO Receipts (client_id, doc_path) 
+                    VALUES (@clientId, '') 
+                    RETURNING receipt_id";
+
+                        int receiptId;
+                        using (var cmd = new NpgsqlCommand(insertReceiptQuery, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@clientId", clientId);
+                            receiptId = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
+                        // 2. Для каждого устройства из tempDeviceIds создаем запись в таблице Repairs
+                        foreach (int deviceId in tempDeviceIds)
+                        {
+                            // Проверяем, что ID устройства валидный
+                            if (deviceId <= 0)
+                            {
+                                throw new Exception($"Некорректный ID устройства: {deviceId}");
+                            }
+
+                            // Проверяем существование устройства в базе
+                            string checkDeviceQuery = "SELECT 1 FROM Devices WHERE device_id = @deviceId";
+                            using (var checkCmd = new NpgsqlCommand(checkDeviceQuery, connection, transaction))
+                            {
+                                checkCmd.Parameters.AddWithValue("@deviceId", deviceId);
+                                var deviceExists = checkCmd.ExecuteScalar();
+
+                                if (deviceExists == null)
+                                {
+                                    throw new Exception($"Устройство с ID {deviceId} не найдено в базе данных");
+                                }
+                            }
+
+                            string insertRepairQuery = @"
+                        INSERT INTO Repairs (device_id, receipt_id, work_performed, acceptance_date, status)
+                        VALUES (@deviceId, @receiptId, 'Принято в ремонт', @acceptanceDate, 'принят')";
+
+                            using (var cmd = new NpgsqlCommand(insertRepairQuery, connection, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@deviceId", deviceId);
+                                cmd.Parameters.AddWithValue("@receiptId", receiptId);
+                                cmd.Parameters.AddWithValue("@acceptanceDate", DateTime.Today);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        // Если все успешно - коммитим транзакцию
+                        transaction.Commit();
+
+                        MessageBox.Show("Квитанция и ремонты успешно созданы", "Успех",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Очищаем список устройств после успешного создания
+                        tempDeviceIds.Clear();
+                        devicesDataTable.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        // В случае ошибки откатываем транзакцию
+                        try { transaction.Rollback(); } catch { }
+                        MessageBox.Show($"Ошибка при создании квитанции: {ex.Message}", "Ошибка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
