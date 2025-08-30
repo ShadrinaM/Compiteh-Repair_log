@@ -35,8 +35,6 @@
             dataGridViewRepairs = new DataGridView();
             dataGridViewRepairsInfo = new DataGridView();
             btnAddRepairs = new Button();
-            btnEditRepairs = new Button();
-            btnDelRepairs = new Button();
             panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewRepairs).BeginInit();
@@ -81,7 +79,7 @@
             // dataGridViewRepairs
             // 
             dataGridViewRepairs.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewRepairs.Location = new Point(12, 140);
+            dataGridViewRepairs.Location = new Point(12, 124);
             dataGridViewRepairs.Name = "dataGridViewRepairs";
             dataGridViewRepairs.Size = new Size(984, 322);
             dataGridViewRepairs.TabIndex = 3;
@@ -89,9 +87,9 @@
             // dataGridViewRepairsInfo
             // 
             dataGridViewRepairsInfo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewRepairsInfo.Location = new Point(12, 483);
+            dataGridViewRepairsInfo.Location = new Point(12, 452);
             dataGridViewRepairsInfo.Name = "dataGridViewRepairsInfo";
-            dataGridViewRepairsInfo.Size = new Size(984, 234);
+            dataGridViewRepairsInfo.Size = new Size(984, 265);
             dataGridViewRepairsInfo.TabIndex = 4;
             // 
             // btnAddRepairs
@@ -104,50 +102,14 @@
             btnAddRepairs.FlatStyle = FlatStyle.Flat;
             btnAddRepairs.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             btnAddRepairs.ForeColor = SystemColors.Highlight;
-            btnAddRepairs.Location = new Point(12, 102);
+            btnAddRepairs.Location = new Point(12, 81);
             btnAddRepairs.Margin = new Padding(3, 2, 3, 2);
             btnAddRepairs.Name = "btnAddRepairs";
             btnAddRepairs.Size = new Size(167, 33);
             btnAddRepairs.TabIndex = 14;
-            btnAddRepairs.Text = "Добавить ремонт";
+            btnAddRepairs.Text = "Добавить заказ";
             btnAddRepairs.UseVisualStyleBackColor = false;
             btnAddRepairs.Click += btnAddRepairs_Click;
-            // 
-            // btnEditRepairs
-            // 
-            btnEditRepairs.BackColor = SystemColors.ControlLightLight;
-            btnEditRepairs.FlatAppearance.BorderColor = SystemColors.Highlight;
-            btnEditRepairs.FlatAppearance.BorderSize = 2;
-            btnEditRepairs.FlatAppearance.MouseDownBackColor = SystemColors.ActiveBorder;
-            btnEditRepairs.FlatAppearance.MouseOverBackColor = SystemColors.ActiveCaption;
-            btnEditRepairs.FlatStyle = FlatStyle.Flat;
-            btnEditRepairs.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnEditRepairs.ForeColor = SystemColors.Highlight;
-            btnEditRepairs.Location = new Point(185, 102);
-            btnEditRepairs.Margin = new Padding(3, 2, 3, 2);
-            btnEditRepairs.Name = "btnEditRepairs";
-            btnEditRepairs.Size = new Size(167, 33);
-            btnEditRepairs.TabIndex = 15;
-            btnEditRepairs.Text = "Изменить ремонт";
-            btnEditRepairs.UseVisualStyleBackColor = false;
-            // 
-            // btnDelRepairs
-            // 
-            btnDelRepairs.BackColor = SystemColors.ControlLightLight;
-            btnDelRepairs.FlatAppearance.BorderColor = SystemColors.Highlight;
-            btnDelRepairs.FlatAppearance.BorderSize = 2;
-            btnDelRepairs.FlatAppearance.MouseDownBackColor = SystemColors.ActiveBorder;
-            btnDelRepairs.FlatAppearance.MouseOverBackColor = SystemColors.ActiveCaption;
-            btnDelRepairs.FlatStyle = FlatStyle.Flat;
-            btnDelRepairs.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnDelRepairs.ForeColor = SystemColors.Highlight;
-            btnDelRepairs.Location = new Point(358, 102);
-            btnDelRepairs.Margin = new Padding(3, 2, 3, 2);
-            btnDelRepairs.Name = "btnDelRepairs";
-            btnDelRepairs.Size = new Size(167, 33);
-            btnDelRepairs.TabIndex = 16;
-            btnDelRepairs.Text = "Удалить ремонт";
-            btnDelRepairs.UseVisualStyleBackColor = false;
             // 
             // ViewData
             // 
@@ -155,8 +117,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.GradientInactiveCaption;
             ClientSize = new Size(1008, 729);
-            Controls.Add(btnDelRepairs);
-            Controls.Add(btnEditRepairs);
             Controls.Add(btnAddRepairs);
             Controls.Add(dataGridViewRepairsInfo);
             Controls.Add(dataGridViewRepairs);
@@ -179,7 +139,5 @@
         private DataGridView dataGridViewRepairsInfo;
         private PictureBox picLogo;
         private Button btnAddRepairs;
-        private Button btnEditRepairs;
-        private Button btnDelRepairs;
     }
 }

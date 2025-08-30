@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using CompiTeh_Repair_log.Forms;
+using Npgsql;
 using System;
 using System.Data;
 using System.Drawing;
@@ -10,6 +11,7 @@ namespace CompiTeh_Repair_log
     {
         private NpgsqlConnection connection;
         private Form mainForm;
+        private ContextMenuStrip repairsContextMenu;
 
         public ViewData(NpgsqlConnection conn, Form menushka)
         {
@@ -19,10 +21,13 @@ namespace CompiTeh_Repair_log
             connection = conn;
             this.FormClosed += WinForm_FormClosed;
 
-            // Подписываемся на событие клика по ячейкам DataGridView
+            // Инициализация контекстного меню
+            InitializeRepairsContextMenu();
+
+            // Подписываемся на события DataGridView
             dataGridViewRepairs.CellContentClick += dataGridViewRepairs_CellContentClick;
             dataGridViewRepairs.CellClick += DataGridViewRepairs_CellClick;
-
+            dataGridViewRepairs.MouseClick += DataGridViewRepairs_MouseClick;
 
             // Инициализация DataGridView
             InitializeRepairsDataGridView();
@@ -30,6 +35,211 @@ namespace CompiTeh_Repair_log
             // Загрузка данных
             LoadRepairsData();
         }
+
+        private void InitializeRepairsContextMenu()
+        {
+            repairsContextMenu = new ContextMenuStrip();
+
+            // Первый  пункт меню - указать запчасти
+            var addSparePartsItem = new ToolStripMenuItem("Указать использованные запчасти");
+            addSparePartsItem.Click += AddSparePartsItem_Click;
+            repairsContextMenu.Items.Add(addSparePartsItem);
+
+            // Добавляем разделитель
+            repairsContextMenu.Items.Add(new ToolStripSeparator());
+
+            // Второй пункт меню - пометить выполненным
+            var markCompletedItem = new ToolStripMenuItem("Пометить ремонт выполненным");
+            markCompletedItem.Click += MarkCompletedItem_Click;
+            repairsContextMenu.Items.Add(markCompletedItem);
+
+            // Третий пункт меню - пометить выданным
+            var markIssuedItem = new ToolStripMenuItem("Пометить ремонт выданным");
+            markIssuedItem.Click += MarkIssuedItem_Click;
+            repairsContextMenu.Items.Add(markIssuedItem);
+
+            // Добавляем разделитель
+            repairsContextMenu.Items.Add(new ToolStripSeparator());
+
+            // Четвертый пункт меню - изменить заказ
+            var editRepairItem = new ToolStripMenuItem("Изменить заказ");
+            editRepairItem.Click += EditRepairItem_Click;
+            repairsContextMenu.Items.Add(editRepairItem);
+
+            // Пятый пункт меню - удалить заказ
+            var deleteRepairItem = new ToolStripMenuItem("Удалить заказ");
+            deleteRepairItem.Click += DeleteRepairItem_Click;
+            repairsContextMenu.Items.Add(deleteRepairItem);
+        }
+
+        private void MarkCompletedItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewRepairs.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridViewRepairs.SelectedRows[0];
+                int repairId = Convert.ToInt32(selectedRow.Cells["RepairId"].Value);
+
+                // Проверяем статус ремонта
+                string currentStatus = GetRepairStatus(repairId);
+                if (currentStatus != "принят")
+                {
+                    MessageBox.Show("Можно пометить выполненным только ремонты со статусом 'принят'", "Ошибка",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Обновляем статус ремонта на "выполнен"
+                UpdateRepairStatus(repairId, "выполнен");
+                // Обновляем данные в таблице
+                LoadRepairsData();
+
+                MessageBox.Show($"Статус ремонта успешно изменен на выполнен", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+
+        private void AddSparePartsItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewRepairs.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridViewRepairs.SelectedRows[0];
+                int repairId = Convert.ToInt32(selectedRow.Cells["RepairId"].Value);
+
+                // Проверяем статус ремонта
+                string currentStatus = GetRepairStatus(repairId);
+                if (currentStatus != "принят" && currentStatus != "выполнен")
+                {
+                    MessageBox.Show("Можно добавлять запчасти только к ремонтам со статусом 'принят' или 'выполнен'",
+                                  "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Открываем форму для добавления запчастей
+                var sparePartsForm = new SparePartForRepairForm(connection, this, repairId);
+                sparePartsForm.ShowDialog();
+
+                // Обновляем данные о запчастях после закрытия формы
+                LoadPartsInfoForRepair(repairId);
+            }
+        }
+
+        // получить статус ремонта по id 
+        private string GetRepairStatus(int repairId)
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                string query = "SELECT status FROM Repairs WHERE repair_id = @repairId";
+                using (var cmd = new NpgsqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@repairId", repairId);
+                    return cmd.ExecuteScalar()?.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при получении статуса ремонта: {ex.Message}", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+        private void MarkIssuedItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewRepairs.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridViewRepairs.SelectedRows[0];
+                int repairId = Convert.ToInt32(selectedRow.Cells["RepairId"].Value);
+
+                // Проверяем статус ремонта
+                string currentStatus = GetRepairStatus(repairId);
+                if (currentStatus != "выполнен")
+                {
+                    MessageBox.Show("Можно пометить выданным только ремонты со статусом 'выполнен'",
+                                  "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Обновляем статус ремонта на "выдан"
+                UpdateRepairStatus(repairId, "выдан");
+                LoadRepairsData();
+
+                MessageBox.Show("Статус ремонта успешно изменен на 'выдан'", "Успех",
+                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+
+        // изменить статус ремонта по id 
+        private void UpdateRepairStatus(int repairId, string newStatus)
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                if (newStatus == "выполнен")
+                {
+                    string query = "UPDATE Repairs SET status = @status::repair_status_enum WHERE repair_id = @repairId";
+                    using (var cmd = new NpgsqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@status", newStatus);
+                        cmd.Parameters.AddWithValue("@repairId", repairId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                if (newStatus == "выдан")
+                {
+                    string query = @"
+                        UPDATE Repairs 
+                        SET status = @status::repair_status_enum, 
+                            completion_date = CASE WHEN @status::repair_status_enum = 'выдан' THEN CURRENT_DATE ELSE completion_date END
+                        WHERE repair_id = @repairId";
+                    using (var cmd = new NpgsqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@status", newStatus);
+                        cmd.Parameters.AddWithValue("@repairId", repairId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при обновлении статуса ремонта: {ex.Message}", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void DataGridViewRepairs_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var hit = dataGridViewRepairs.HitTest(e.X, e.Y);
+                if (hit.RowIndex >= 0 && hit.RowIndex < dataGridViewRepairs.Rows.Count)
+                {
+                    dataGridViewRepairs.ClearSelection();
+                    dataGridViewRepairs.Rows[hit.RowIndex].Selected = true;
+                    repairsContextMenu.Show(dataGridViewRepairs, e.Location);
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void InitializeRepairsDataGridView()
         {
@@ -777,10 +987,251 @@ namespace CompiTeh_Repair_log
 
         private void btnAddRepairs_Click(object sender, EventArgs e)
         {
-            ReceiptsForms ReceiptsForma = new ReceiptsForms(connection, this);
-            ReceiptsForma.Show();
-            this.Hide();
+            ReceiptsForms receiptsForm = new ReceiptsForms(connection, this);
+            if (receiptsForm.ShowDialog() == DialogResult.OK)
+            {
+                // Обновляем данные после закрытия формы
+                LoadRepairsData();
+            }
         }
-    }
 
+
+
+
+
+
+
+
+
+
+        // Получение receipt_id из repair_id
+        private int GetReceiptIdFromRepair(int repairId)
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                string query = "SELECT receipt_id FROM Repairs WHERE repair_id = @repairId";
+                using (var cmd = new NpgsqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@repairId", repairId);
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при получении ID квитанции: {ex.Message}", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+        }
+
+        // Изменение заказа
+        private void EditRepairItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewRepairs.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridViewRepairs.SelectedRows[0];
+                int repairId = Convert.ToInt32(selectedRow.Cells["RepairId"].Value);
+
+                // Получаем receipt_id из repair_id
+                int receiptId = GetReceiptIdFromRepair(repairId);
+
+                if (receiptId > 0)
+                {
+                    // Открываем форму ReceiptsForms в режиме редактирования
+                    var receiptsForm = new ReceiptsForms(connection, this, true, receiptId);
+                    
+                    // Используем ShowDialog() вместо Show() для ожидания закрытия формы
+                    if (receiptsForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Обновляем данные после закрытия формы редактирования
+                        LoadRepairsData();
+                    }
+
+                    this.Show(); // Показываем текущую форму
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось найти квитанцию для данного ремонта", "Ошибка",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
+
+
+
+        // Получение информации о заказе
+        private (int receiptId, int repairsCount, string clientInfo) GetReceiptInfo(int repairId)
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                string query = @"
+        SELECT 
+            r.receipt_id,
+            (SELECT COUNT(*) FROM Repairs WHERE receipt_id = r.receipt_id) as repairs_count,
+            CASE 
+                WHEN c.client_type = 0 THEN c.full_name
+                ELSE COALESCE(c.organization_name, c.full_name)
+            END as client_info
+        FROM Repairs rep
+        JOIN Receipts r ON rep.receipt_id = r.receipt_id
+        JOIN Clients c ON r.client_id = c.client_id
+        WHERE rep.repair_id = @repairId";
+
+                using (var cmd = new NpgsqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@repairId", repairId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return (
+                                reader.GetInt32(0),
+                                reader.GetInt32(1),
+                                reader.GetString(2)
+                            );
+                        }
+                    }
+                }
+                return (-1, 0, "");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при получении информации о заказе: {ex.Message}", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return (-1, 0, "");
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+        }
+
+        // Обработчик удаления заказа
+        private void DeleteRepairItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewRepairs.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridViewRepairs.SelectedRows[0];
+                int repairId = Convert.ToInt32(selectedRow.Cells["RepairId"].Value);
+
+                // Получаем информацию о заказе
+                var (receiptId, repairsCount, clientInfo) = GetReceiptInfo(repairId);
+
+                if (receiptId <= 0)
+                {
+                    MessageBox.Show("Не удалось получить информацию о заказе", "Ошибка",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Создаем сообщение подтверждения
+                string message = $"При удалении заказа #{receiptId} для клиента '{clientInfo}' " +
+                                $"удалятся все ремонты ({repairsCount} шт.), в него входящие.\n\n" +
+                                "Вы уверены, что хотите удалить весь заказ?\n\n" +
+                                "Для того чтобы удалить один ремонт, зайдите в редактирование заказа.";
+
+                var result = MessageBox.Show(message, "Подтверждение удаления заказа",
+                                           MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
+                                           MessageBoxDefaultButton.Button2);
+
+                if (result == DialogResult.Yes)
+                {
+                    DeleteReceiptWithRepairs(receiptId);
+                }
+            }
+        }
+
+        // Удаление заказа с ремонтами
+        private void DeleteReceiptWithRepairs(int receiptId)
+        {
+            try
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. Сначала удаляем все запчасти, связанные с ремонтами этого заказа
+                        string deleteSparePartsQuery = @"
+                DELETE FROM Sparepart 
+                WHERE repair_id IN (
+                    SELECT repair_id FROM Repairs WHERE receipt_id = @receiptId
+                )";
+
+                        using (var cmd = new NpgsqlCommand(deleteSparePartsQuery, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@receiptId", receiptId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 2. Удаляем все ремонты этого заказа
+                        string deleteRepairsQuery = "DELETE FROM Repairs WHERE receipt_id = @receiptId";
+                        using (var cmd = new NpgsqlCommand(deleteRepairsQuery, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@receiptId", receiptId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 3. Удаляем саму квитанцию
+                        string deleteReceiptQuery = "DELETE FROM Receipts WHERE receipt_id = @receiptId";
+                        using (var cmd = new NpgsqlCommand(deleteReceiptQuery, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@receiptId", receiptId);
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                transaction.Commit();
+                                MessageBox.Show("Заказ и все связанные ремонты успешно удалены", "Успех",
+                                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                // Обновляем данные
+                                LoadRepairsData();
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show("Не удалось найти заказ для удаления", "Ошибка",
+                                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Ошибка при удалении заказа: {ex.Message}", "Ошибка",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+        }
+
+    }
 }

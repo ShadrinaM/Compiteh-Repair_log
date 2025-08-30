@@ -1,43 +1,43 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="28.0.6">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="680" dy="933" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1273" dy="688" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--0" value="Устройства (Devices)" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="10" y="80" width="430" height="160" as="geometry">
+          <mxGeometry x="45" y="150" width="390" height="140" as="geometry">
             <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--1" value="device_id - INT (PK, AI) - Уникальный идентификатор устройства&#xa;device_type - VARCHAR(50) - Тип устройства (принтер, компьютер)&#xa;manufacturer - VARCHAR(50) - Производитель устройства&#xa;model_number - VARCHAR(50) - Номер модели устройства&#xa;serial_number - VARCHAR(50) - Серийный номер устройства&#xa;completeness - TEXT – Комплектность &#xa;device_notes - TEXT - Примечание к устройству" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--0" vertex="1">
-          <mxGeometry y="26" width="430" height="134" as="geometry" />
+          <mxGeometry y="26" width="390" height="114" as="geometry" />
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--6" value="Ремонты (Repairs)" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="10" y="320" width="520" height="180" as="geometry">
+          <mxGeometry x="10" y="330" width="460" height="150" as="geometry">
             <mxRectangle x="130" y="380" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--7" value="repair_id - INT (PK, AI) - Уникальный ID ремонта&#xa;device_id - INT (FK) - Ссылка на устройство&#xa;receipt_id - INT (FK) - Ссылка на квитанцию&#xa;work_performed - TEXT - Проведённые работы&#xa;acceptance_date - DATE - Дата принятия в ремонт&#xa;completion_date - DATE - Фактическая дата выдачи клиенту, если в работе NULL&#xa;status - repair_status_enum AS ENUM (&#39;принят&#39;, &#39;выполнен&#39;, &#39;выдан&#39;);&#xa;repair_notes - TEXT - Доп. примечания к ремонту&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--6" vertex="1">
-          <mxGeometry y="26" width="520" height="154" as="geometry" />
+          <mxGeometry y="26" width="460" height="124" as="geometry" />
         </mxCell>
-        <mxCell id="zkfFHV4jXpPFQw0GAbJ--13" value="Receipts (Квитанции)" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="560" y="320" width="463" height="140" as="geometry">
+        <mxCell id="zkfFHV4jXpPFQw0GAbJ--13" value="Квитанции (Receipts)" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="584.25" y="365" width="320" height="80" as="geometry">
             <mxRectangle x="340" y="380" width="170" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--14" value="receipt_id - INT (PK, AI) - Уникальный ID заказа&#xa;client_id - INT (FK) - Ссылка на клиента&#xa;doc_path - VARCHAR(255) - Путь к файлу с квитанцией&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--13" vertex="1">
-          <mxGeometry y="26" width="463" height="114" as="geometry" />
+          <mxGeometry y="26" width="320" height="54" as="geometry" />
         </mxCell>
         <mxCell id="G32UZXwOOaWwSeeDJl15-0" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;endFill=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--17" target="zkfFHV4jXpPFQw0GAbJ--13" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--17" value="Клиенты (Clients)" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="521.5" y="80" width="540" height="160" as="geometry">
+          <mxGeometry x="480" y="500" width="528.5" height="130" as="geometry">
             <mxRectangle x="550" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zkfFHV4jXpPFQw0GAbJ--18" value="client_id - INT (PK, AI) - Уникальный идентификатор клиента&#xa;client_type - ENUM(&#39;0&#39;, &#39;1&#39;) - Тип клиента (0 для физ лиц, 1 для юр лиц)&#xa;full_name - VARCHAR(100) - ФИО&#xa;contact_phone - VARCHAR(20) - Контактный номер телефона&#xa;email  - VARCHAR(100) - Контактная почта&#xa;organization_name - VARCHAR(100) - Название организации для юр лиц, NULL для физ лиц&#xa;client_notes - TEXT - Примечание к клиенту&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--17" vertex="1">
-          <mxGeometry y="26" width="540" height="134" as="geometry" />
+        <mxCell id="zkfFHV4jXpPFQw0GAbJ--18" value="client_id - INT (PK, AI) - Уникальный идентификатор клиента&#xa;client_type - ENUM(&#39;0&#39;, &#39;1&#39;) - Тип клиента (0 для физ лиц, 1 для юр лиц)&#xa;full_name - VARCHAR(100) - ФИО&#xa;contact_phone - VARCHAR(20) - Контактный номер телефона&#xa;email  - VARCHAR(100) - Контактная почта&#xa;organization_name - VARCHAR(100) - Название организации для юр лиц (NULL для физ лиц)&#xa;client_notes - TEXT - Примечание к клиенту&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--17" vertex="1">
+          <mxGeometry y="26" width="528.5" height="104" as="geometry" />
         </mxCell>
         <mxCell id="G32UZXwOOaWwSeeDJl15-1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;endFill=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--13" target="zkfFHV4jXpPFQw0GAbJ--6" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -52,12 +52,12 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="QUNeAQoOBO8wBSyquZbU-0" value="Запчасть (Sparepart)" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="10" y="550" width="430" height="130" as="geometry">
+          <mxGeometry x="30" y="520" width="420" height="110" as="geometry">
             <mxRectangle x="130" y="380" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
         <mxCell id="QUNeAQoOBO8wBSyquZbU-1" value="sparepart_id - INT (PK, AI) - Уникальный ID запчасти&#xa;repair_id  - INT (FK) - Ссылка на ремонт (NULL, если запчасть на складе)&#xa;name - VARCHAR(100) - Название запчасти&#xa;price - DECIMAL(10, 2) – Стоимость запчасти&#xa;quantity - INT – Количество (по умолчанию 1)&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="QUNeAQoOBO8wBSyquZbU-0" vertex="1">
-          <mxGeometry y="26" width="430" height="84" as="geometry" />
+          <mxGeometry y="26" width="420" height="84" as="geometry" />
         </mxCell>
         <mxCell id="QUNeAQoOBO8wBSyquZbU-2" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;endFill=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="zkfFHV4jXpPFQw0GAbJ--6" target="QUNeAQoOBO8wBSyquZbU-0" edge="1">
           <mxGeometry relative="1" as="geometry">

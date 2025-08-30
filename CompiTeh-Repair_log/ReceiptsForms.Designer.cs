@@ -40,8 +40,6 @@
             lbСhoiceDevices = new Label();
             btnAddDevices = new Button();
             dataGridViewDevices = new DataGridView();
-            textBoxRepairNotes = new TextBox();
-            labelRepairNotes = new Label();
             panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewClient).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewDevices).BeginInit();
@@ -66,9 +64,9 @@
             labelHeader.ForeColor = SystemColors.Highlight;
             labelHeader.Location = new Point(10, 7);
             labelHeader.Name = "labelHeader";
-            labelHeader.Size = new Size(303, 37);
+            labelHeader.Size = new Size(275, 37);
             labelHeader.TabIndex = 0;
-            labelHeader.Text = "Добавление ремонта";
+            labelHeader.Text = "Добавление заказа";
             // 
             // btnCancel
             // 
@@ -80,7 +78,7 @@
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             btnCancel.ForeColor = SystemColors.Highlight;
-            btnCancel.Location = new Point(10, 736);
+            btnCancel.Location = new Point(10, 576);
             btnCancel.Margin = new Padding(3, 2, 3, 2);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(157, 33);
@@ -98,7 +96,7 @@
             btnOK.FlatStyle = FlatStyle.Flat;
             btnOK.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             btnOK.ForeColor = SystemColors.Highlight;
-            btnOK.Location = new Point(631, 736);
+            btnOK.Location = new Point(631, 576);
             btnOK.Margin = new Padding(3, 2, 3, 2);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(157, 33);
@@ -208,33 +206,12 @@
             dataGridViewDevices.Size = new Size(778, 197);
             dataGridViewDevices.TabIndex = 24;
             // 
-            // textBoxRepairNotes
-            // 
-            textBoxRepairNotes.Location = new Point(10, 604);
-            textBoxRepairNotes.Multiline = true;
-            textBoxRepairNotes.Name = "textBoxRepairNotes";
-            textBoxRepairNotes.Size = new Size(778, 127);
-            textBoxRepairNotes.TabIndex = 30;
-            // 
-            // labelRepairNotes
-            // 
-            labelRepairNotes.AutoSize = true;
-            labelRepairNotes.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            labelRepairNotes.ForeColor = SystemColors.Highlight;
-            labelRepairNotes.Location = new Point(10, 564);
-            labelRepairNotes.Name = "labelRepairNotes";
-            labelRepairNotes.Size = new Size(303, 37);
-            labelRepairNotes.TabIndex = 31;
-            labelRepairNotes.Text = "Примечания к заказу";
-            // 
             // ReceiptsForms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.GradientInactiveCaption;
-            ClientSize = new Size(800, 780);
-            Controls.Add(labelRepairNotes);
-            Controls.Add(textBoxRepairNotes);
+            ClientSize = new Size(800, 622);
             Controls.Add(dataGridViewDevices);
             Controls.Add(btnAddDevices);
             Controls.Add(lbСhoiceDevices);
@@ -247,7 +224,7 @@
             Controls.Add(comboBoxClientType);
             Controls.Add(labelClientType);
             Name = "ReceiptsForms";
-            Text = "ViewData";
+            Text = "ReceiptsForms";
             Load += ViewData_Load;
             panelHeader.ResumeLayout(false);
             panelHeader.PerformLayout();
@@ -271,7 +248,5 @@
         private Label lbСhoiceDevices;
         private Button btnAddDevices;
         private DataGridView dataGridViewDevices;
-        private TextBox textBoxRepairNotes;
-        private Label labelRepairNotes;
     }
 }

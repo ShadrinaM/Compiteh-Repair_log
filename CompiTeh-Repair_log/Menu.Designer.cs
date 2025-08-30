@@ -35,6 +35,7 @@
             picLogo = new PictureBox();
             panelHeader = new Panel();
             btnDebtorsReport = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             panelHeader.SuspendLayout();
             SuspendLayout();
@@ -136,12 +137,32 @@
             btnDebtorsReport.UseVisualStyleBackColor = false;
             btnDebtorsReport.Click += btnDevicesForm_Click;
             // 
+            // button1
+            // 
+            button1.BackColor = SystemColors.ControlLightLight;
+            button1.FlatAppearance.BorderColor = SystemColors.Highlight;
+            button1.FlatAppearance.BorderSize = 2;
+            button1.FlatAppearance.MouseDownBackColor = SystemColors.ActiveBorder;
+            button1.FlatAppearance.MouseOverBackColor = SystemColors.ActiveCaption;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            button1.ForeColor = SystemColors.Highlight;
+            button1.Location = new Point(12, 331);
+            button1.Margin = new Padding(3, 2, 3, 2);
+            button1.Name = "button1";
+            button1.Size = new Size(564, 56);
+            button1.TabIndex = 7;
+            button1.Text = "форма запчасть";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.GradientInactiveCaption;
-            ClientSize = new Size(590, 337);
+            ClientSize = new Size(590, 397);
+            Controls.Add(button1);
             Controls.Add(panelHeader);
             Controls.Add(btnClientForma);
             Controls.Add(btnDebtorsReport);
@@ -163,5 +184,6 @@
         private PictureBox picLogo;
         private Panel panelHeader;
         private Button btnDebtorsReport;
+        private Button button1;
     }
 }

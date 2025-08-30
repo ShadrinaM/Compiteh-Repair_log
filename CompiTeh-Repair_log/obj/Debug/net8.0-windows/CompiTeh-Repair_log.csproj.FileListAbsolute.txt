@@ -25,3 +25,5 @@ M:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\ref\Comp
 M:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh_Repair_log.ViewData.resources
 M:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh_Repair_log.Forms.DevicesForm.resources
 M:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh_Repair_log.ReceiptsForms.resources
+M:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh_Repair_log.Forms.SparepartForm.resources
+M:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh_Repair_log.Forms.SparePartForRepairForm.resources

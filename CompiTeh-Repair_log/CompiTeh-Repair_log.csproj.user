@@ -7,6 +7,12 @@
     <Compile Update="Forms\DevicesForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\SparepartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\SparePartForRepairForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Menu.cs">
       <SubType>Form</SubType>
     </Compile>
