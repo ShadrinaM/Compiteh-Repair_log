@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|solutionrelative:viewdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|D:\\Git\\Compiteh-Repair_log\\CompiTeh-Repair_log\\viewdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|solutionrelative:viewdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|d:\\git\\compiteh-repair_log\\compiteh-repair_log\\forms\\sparepartform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|solutionrelative:forms\\sparepartform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|D:\\Git\\Compiteh-Repair_log\\CompiTeh-Repair_log\\viewdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|solutionrelative:viewdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5602D28C-E093-4106-8B59-127AD1DC3ADB}|CompiTeh-Repair_log.csproj|d:\\git\\compiteh-repair_log\\compiteh-repair_log\\forms\\sparepartforrepairform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
@@ -40,20 +40,20 @@
               "RelativeDocumentMoniker": "ViewData.cs",
               "ToolTip": "D:\\Git\\Compiteh-Repair_log\\CompiTeh-Repair_log\\ViewData.cs",
               "RelativeToolTip": "ViewData.cs",
-              "ViewState": "AgIAABMBAAAAAAAAAAAMwC0BAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAIgAAAAAAAAAAAAcwIwAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-14T15:20:27.244Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "SparepartForm.cs",
               "DocumentMoniker": "D:\\Git\\Compiteh-Repair_log\\CompiTeh-Repair_log\\Forms\\SparepartForm.cs",
               "RelativeDocumentMoniker": "Forms\\SparepartForm.cs",
               "ToolTip": "D:\\Git\\Compiteh-Repair_log\\CompiTeh-Repair_log\\Forms\\SparepartForm.cs",
               "RelativeToolTip": "Forms\\SparepartForm.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMAAAAPAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAADMAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-14T14:57:33.147Z",
               "EditorCaption": ""
@@ -85,7 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ViewData.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
               "DocumentMoniker": "D:\\Git\\Compiteh-Repair_log\\CompiTeh-Repair_log\\ViewData.cs",
               "RelativeDocumentMoniker": "ViewData.cs",
