@@ -51,6 +51,11 @@ namespace CompiTeh_Repair_log.Forms
         {
             try
             {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
                 string query = @"SELECT name, price, quantity 
                            FROM Sparepart 
                            WHERE sparepart_id = @sparepartId";
