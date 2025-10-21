@@ -13,9 +13,6 @@
     <Compile Update="Forms\SparePartForRepairForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Menu.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="ReceiptsForms.cs">
       <SubType>Form</SubType>
     </Compile>

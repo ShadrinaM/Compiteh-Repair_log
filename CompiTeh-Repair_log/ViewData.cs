@@ -1,4 +1,5 @@
 ﻿using CompiTeh_Repair_log.Forms;
+using Microsoft.Office.Interop.Excel;
 using Npgsql;
 using System;
 using System.Data;
@@ -11,15 +12,14 @@ namespace CompiTeh_Repair_log
     public partial class ViewData : Form
     {
         private NpgsqlConnection connection;
-        private Form mainForm;
+
         private ContextMenuStrip repairsContextMenu;
 
-        public ViewData(NpgsqlConnection conn, Form menushka)
+        public ViewData()
         {
+            Connect();
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.mainForm = menushka;
-            connection = conn;
             this.FormClosed += WinForm_FormClosed;
 
             // Инициализация контекстного меню
@@ -37,16 +37,31 @@ namespace CompiTeh_Repair_log
             LoadRepairsData();
         }
 
+        public void Connect()
+        {
+            // Подключение к БД
+            try
+            {
+                connection = new NpgsqlConnection("Server=localhost;Port=5432;User ID=postgres;Password=24072012;Database=RepairLogDB");
+                connection.Open();
+            }
+            catch (NpgsqlException ex)
+            {
+                MessageBox.Show($"Ошибка подключения к базе данных:\n{ex.Message}", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         // Обработчик закрытия формы
         private void WinForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            mainForm.Show();
+            //mainForm.Show();
         }
 
         // Возврат в предыдущее окно
         private void btnBack_Click(object sender, EventArgs e)
         {
-            this.Close();
+           // this.Close();
         }
 
         // Инициализация контекстного меню
@@ -685,7 +700,7 @@ namespace CompiTeh_Repair_log
                     // Добавляем строку с итогом
                     dataGridViewRepairsInfo.Rows.Add("ИТОГО:", "", "", totalSum);
                     dataGridViewRepairsInfo.Rows[dataGridViewRepairsInfo.Rows.Count - 1].DefaultCellStyle.Font =
-                        new Font(dataGridViewRepairsInfo.Font, FontStyle.Bold);
+                        new System.Drawing.Font(dataGridViewRepairsInfo.Font, FontStyle.Bold);
                 }
             }
             catch (Exception ex)
@@ -939,7 +954,7 @@ namespace CompiTeh_Repair_log
             if (parameter == "Примечания")
             {
                 dataGridViewRepairsInfo.Rows[rowIndex].DefaultCellStyle.Font =
-                    new Font(dataGridViewRepairsInfo.Font, FontStyle.Italic);
+                    new System.Drawing.Font(dataGridViewRepairsInfo.Font, FontStyle.Italic);
             }
         }
 
@@ -1058,7 +1073,7 @@ namespace CompiTeh_Repair_log
             if (parameter == "ФИО / Название" || parameter == "Контактный телефон")
             {
                 dataGridViewRepairsInfo.Rows[rowIndex].DefaultCellStyle.Font =
-                    new Font(dataGridViewRepairsInfo.Font, FontStyle.Bold);
+                    new System.Drawing.Font(dataGridViewRepairsInfo.Font, FontStyle.Bold);
             }
         }
 
@@ -1141,7 +1156,7 @@ namespace CompiTeh_Repair_log
             {
                 case "Статус ремонта":
                     dataGridViewRepairsInfo.Rows[rowIndex].DefaultCellStyle.Font =
-                        new Font(dataGridViewRepairsInfo.Font, FontStyle.Bold);
+                        new System.Drawing.Font(dataGridViewRepairsInfo.Font, FontStyle.Bold);
 
                     if (value == "выполнен")
                         dataGridViewRepairsInfo.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.Blue;
@@ -1151,7 +1166,7 @@ namespace CompiTeh_Repair_log
 
                 case "Описание неисправности":
                     dataGridViewRepairsInfo.Rows[rowIndex].DefaultCellStyle.Font =
-                        new Font(dataGridViewRepairsInfo.Font, FontStyle.Italic);
+                        new System.Drawing.Font(dataGridViewRepairsInfo.Font, FontStyle.Italic);
                     break;
             }
         }

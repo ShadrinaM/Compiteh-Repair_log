@@ -58,4 +58,3 @@ D:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh
 D:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\ref\CompiTeh-Repair_log.dll
 D:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\Interop.Microsoft.Office.Interop.Excel.dll
 D:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh-Repair_log.csproj.ResolveComReference.cache
-D:\Git\Compiteh-Repair_log\CompiTeh-Repair_log\obj\Debug\net8.0-windows\CompiTeh_Repair_log.ReceiptGeneration.resources
